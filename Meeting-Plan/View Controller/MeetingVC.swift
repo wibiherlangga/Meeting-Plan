@@ -34,17 +34,46 @@ class MeetingVC: UIViewController {
     }()
     
     let meetingDate: UITextField = {
-       let meetingTitle = UITextField()
-        meetingTitle.placeholder = "Input Date here..."
-        meetingTitle.borderStyle = .roundedRect
-        return meetingTitle
+       let meetingDate = UITextField()
+        meetingDate.placeholder = "Input Date here..."
+        meetingDate.borderStyle = .roundedRect
+        return meetingDate
     }()
     
     let meetingTime: UITextField = {
-       let meetingTitle = UITextField()
-        meetingTitle.placeholder = "Input Time here..."
-        meetingTitle.borderStyle = .roundedRect
-        return meetingTitle
+       let meetingTime = UITextField()
+        meetingTime.placeholder = "Input Time here..."
+        meetingTime.borderStyle = .roundedRect
+        return meetingTime
+    }()
+    
+    let datePicker: UIDatePicker = {
+        let startDate = UIDatePicker()
+        startDate.backgroundColor = .white
+        startDate.datePickerMode = .date
+        startDate.timeZone = .current
+        startDate.addTarget(self, action: #selector(setStartDateChanged(_:)), for: .valueChanged)
+        return startDate
+    }()
+    
+    let timePicker: UIDatePicker = {
+       let time = UIDatePicker()
+        time.backgroundColor = .white
+        time.datePickerMode = .time
+        time.addTarget(self, action: #selector(setTime(_:)), for: .valueChanged)
+        return time
+    }()
+    
+    let toolBar: UIToolbar = {
+        let toolBar = UIToolbar()
+        toolBar.barStyle = .default
+        toolBar.isTranslucent = true
+        let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(onClickDoneButton))
+        toolBar.setItems([space, doneButton], animated: false)
+        toolBar.isUserInteractionEnabled = true
+        toolBar.sizeToFit()
+        return toolBar
     }()
     
     let meetingBtn: UIButton = {
@@ -52,17 +81,115 @@ class MeetingVC: UIViewController {
         meetingBtn.setTitle("Save", for: .normal)
         meetingBtn.backgroundColor = .systemBlue
         meetingBtn.layer.cornerRadius = 5
+        meetingBtn.addTarget(self, action: #selector(btnPressed(_:)), for: .touchUpInside)
         return meetingBtn
     }()
-
+        
+    let persistence: PersistenceManager
+    
+    init(persistence: PersistenceManager) {
+        self.persistence = persistence
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        initializeHideKeyboard()
         configLayout()
+        setDelegate()
+    }
+    
+    private func setDelegate() {
+        
+        meetingDate.inputView = datePicker
+        meetingDate.inputAccessoryView = toolBar
+        
+        meetingTime.inputView = timePicker
+        meetingTime.inputAccessoryView = toolBar
         
     }
     
+    @objc func dismissKeyboard() {
+        self.view.endEditing(true)
+    }
+    
+    @objc
+    private func onClickDoneButton() {
+        self.view.endEditing(true)
+    }
+    
+    @objc
+    private func setStartDateChanged(_ sender: UIDatePicker) {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        meetingDate.text = formatter.string(from: sender.date)
+    }
+
+    @objc
+    private func setTime(_ sender: UIDatePicker) {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .none
+        formatter.timeStyle = .short
+        meetingTime.text = formatter.string(from: sender.date)
+    }
+
+    
+    @objc
+    private func btnPressed(_ sender: UIButton) {
+        save()
+    }
+    
+    @objc
+    private func save() {
+        
+        let meeting = Meeting(context: persistence.context)
+        
+        guard
+            let title = meetingTitle.text, !title.isEmpty,
+            let desc = meetingDescription.text, !desc.isEmpty,
+            let date = meetingDate.text, !date.isEmpty,
+            let time = meetingTime.text, !date.isEmpty
+            else {
+                print("there's textfield contain null")
+                return
+        }
+        
+        meeting.title = title
+        meeting.deskripsi = desc
+        meeting.date = date
+        meeting.time = time
+        
+        persistence.save(success: {
+            Helper.showAlert(message: "Saved Successfully", vc: self)
+        })
+        
+    }
+    
+    func initializeHideKeyboard(){
+    //Declare a Tap Gesture Recognizer which will trigger our dismissMyKeyboard() function
+    let tap: UITapGestureRecognizer = UITapGestureRecognizer(
+    target: self,
+    action: #selector(dismissMyKeyboard))
+    //Add this tap gesture recognizer to the parent view
+    view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissMyKeyboard(){
+    //In short- Dismiss the active keyboard.
+    view.endEditing(true)
+    }
+    
     private func configLayout() {
+        
+        view.backgroundColor = .white
+        
+        view.isUserInteractionEnabled = true
+        
         view.addSubview(titlePage)
 
         let navHeight = (navigationController?.navigationBar.frame.height)!

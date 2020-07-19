@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        let navigation = UINavigationController(rootViewController: MeetingListVC())
+        let navigation = UINavigationController(rootViewController: MeetingListVC(persistence: PersistenceManager.shared))
         window?.rootViewController = navigation
         window?.makeKeyAndVisible()
         
@@ -53,7 +53,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
 
         // Save changes in the application's managed object context when the application transitions to the background.
-        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
+        //PersistenceManager.shared.save()
     }
 
 

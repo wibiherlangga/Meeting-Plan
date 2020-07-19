@@ -9,6 +9,11 @@
 import UIKit
 import SnapKit
 
+enum isDataTable {
+    case empty
+    case fill
+}
+
 class MeetingListVC: UIViewController {
     
     let tableView: UITableView = {
@@ -19,12 +24,43 @@ class MeetingListVC: UIViewController {
     
     private let cellId = "MeetingListCell"
     
+    var meeting = [Meeting]()
+    
+    let persistence: PersistenceManager
+    
+    var isDataTable: isDataTable = .empty
+    
+    init(persistence: PersistenceManager) {
+        self.persistence = persistence
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        debugPrint(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         setupNavigationBar()
         setupConstraints()
         setDelegate()
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        meeting = persistence.fetch(Meeting.self)
+        
+        print("meeting count: \(meeting.count)")
+        guard meeting.count > 0 else {
+            self.isDataTable = .empty
+            return
+        }
+        isDataTable = .fill
+        print("meeting data: \(meeting[0].title)")
+        tableView.reloadData()
     }
     
     private func setDelegate() {
@@ -52,7 +88,7 @@ class MeetingListVC: UIViewController {
     @objc
     private func addMeeting(_ sender: UIBarButtonItem) {
         print("add meeting button pressed")
-        navigationController?.pushViewController(MeetingVC(), animated: true)
+        navigationController?.pushViewController(MeetingVC(persistence: PersistenceManager.shared), animated: true)
     }
 
 }
@@ -64,13 +100,27 @@ extension MeetingListVC: UITableViewDelegate {
 extension MeetingListVC: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        switch isDataTable {
+        case .empty:
+            return 0
+        case .fill:
+            return meeting.count
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MeetingListCell
-        
-        return cell
+        switch isDataTable {
+        case .empty:
+            let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MeetingListCell
+            cell.meetingTitle.text = ""
+            return cell
+        case .fill:
+            let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MeetingListCell
+            cell.meetingTitle.text = meeting[indexPath.row].title
+            cell.meetingDate.text = meeting[indexPath.row].date
+            cell.meetingTime.text = meeting[indexPath.row].time
+            return cell
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
