@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0F1D9AB524C4912100E8C454 /* MeetingListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F1D9AB324C4912100E8C454 /* MeetingListCell.swift */; };
 		0F1D9AB624C4912100E8C454 /* MeetingListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F1D9AB424C4912100E8C454 /* MeetingListCell.xib */; };
+		0F1D9AB824C4A07400E8C454 /* MeetingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F1D9AB724C4A07400E8C454 /* MeetingVC.swift */; };
 		0FB1723C24C41A190042EFFA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB1723B24C41A190042EFFA /* AppDelegate.swift */; };
 		0FB1723E24C41A190042EFFA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB1723D24C41A190042EFFA /* SceneDelegate.swift */; };
 		0FB1724024C41A190042EFFA /* MeetingListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB1723F24C41A190042EFFA /* MeetingListVC.swift */; };
@@ -21,6 +22,7 @@
 /* Begin PBXFileReference section */
 		0F1D9AB324C4912100E8C454 /* MeetingListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingListCell.swift; sourceTree = "<group>"; };
 		0F1D9AB424C4912100E8C454 /* MeetingListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MeetingListCell.xib; sourceTree = "<group>"; };
+		0F1D9AB724C4A07400E8C454 /* MeetingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingVC.swift; sourceTree = "<group>"; };
 		0FB1723824C41A190042EFFA /* Meeting-Plan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Meeting-Plan.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FB1723B24C41A190042EFFA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0FB1723D24C41A190042EFFA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -58,6 +60,7 @@
 			isa = PBXGroup;
 			children = (
 				0FB1723F24C41A190042EFFA /* MeetingListVC.swift */,
+				0F1D9AB724C4A07400E8C454 /* MeetingVC.swift */,
 			);
 			path = "View Controller";
 			sourceTree = "<group>";
@@ -236,6 +239,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F1D9AB824C4A07400E8C454 /* MeetingVC.swift in Sources */,
 				0FB1724624C41A190042EFFA /* Meeting_Plan.xcdatamodeld in Sources */,
 				0FB1724024C41A190042EFFA /* MeetingListVC.swift in Sources */,
 				0FB1723C24C41A190042EFFA /* AppDelegate.swift in Sources */,

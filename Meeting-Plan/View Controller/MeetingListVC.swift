@@ -37,7 +37,7 @@ class MeetingListVC: UIViewController {
         view.addSubview(tableView)
         
         tableView.snp.makeConstraints { (make) in
-            make.top.leading.trailing.bottom.equalToSuperview()
+            make.top.left.right.bottom.equalToSuperview()
         }
         
     }
@@ -52,6 +52,7 @@ class MeetingListVC: UIViewController {
     @objc
     private func addMeeting(_ sender: UIBarButtonItem) {
         print("add meeting button pressed")
+        navigationController?.pushViewController(MeetingVC(), animated: true)
     }
 
 }
