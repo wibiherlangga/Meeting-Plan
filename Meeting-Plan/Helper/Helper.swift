@@ -10,12 +10,15 @@ import UIKit
 
 class Helper {
     
-    static func showAlert(message: String, vc: UIViewController) {
+    static func showAlert(message: String, vc: UIViewController, style: UIAlertAction.Style) {
         let alert = UIAlertController(title: "", message: message, preferredStyle: .alert)
-        let oke = UIAlertAction(title: "OKE", style: .default, handler: nil)
+        let oke = UIAlertAction(title: "OKE", style: style, handler: nil)
+        
         alert.addAction(oke)
         
         vc.present(alert, animated: true, completion: nil)
     }
+    
+    
     
 }

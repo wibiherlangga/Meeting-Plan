@@ -88,7 +88,7 @@ class MeetingListVC: UIViewController {
     @objc
     private func addMeeting(_ sender: UIBarButtonItem) {
         print("add meeting button pressed")
-        navigationController?.pushViewController(MeetingVC(persistence: PersistenceManager.shared), animated: true)
+        navigationController?.pushViewController(MeetingVC(persistence: PersistenceManager.shared, dataUpdate: Meeting(), isUpdated: false), animated: true)
     }
 
 }
@@ -121,6 +121,11 @@ extension MeetingListVC: UITableViewDataSource {
             cell.meetingTime.text = meeting[indexPath.row].time
             return cell
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = MeetingVC(persistence: PersistenceManager.shared, dataUpdate: meeting[indexPath.row], isUpdated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

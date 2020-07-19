@@ -52,6 +52,7 @@ class MeetingVC: UIViewController {
         startDate.backgroundColor = .white
         startDate.datePickerMode = .date
         startDate.timeZone = .current
+        startDate.minimumDate = Date()
         startDate.addTarget(self, action: #selector(setStartDateChanged(_:)), for: .valueChanged)
         return startDate
     }()
@@ -84,11 +85,25 @@ class MeetingVC: UIViewController {
         meetingBtn.addTarget(self, action: #selector(btnPressed(_:)), for: .touchUpInside)
         return meetingBtn
     }()
+    
+    let deleteBtn: UIButton = {
+       let deleteBtn = UIButton()
+        deleteBtn.setTitle("Cancel", for: .normal)
+        deleteBtn.backgroundColor = .systemRed
+        deleteBtn.layer.cornerRadius = 5
+        deleteBtn.addTarget(self, action: #selector(btnDelete(_:)), for: .touchUpInside)
+        return deleteBtn
+    }()
         
     let persistence: PersistenceManager
     
-    init(persistence: PersistenceManager) {
+    var dataUpdate = Meeting()
+    var isUpdate: Bool = false
+    
+    init(persistence: PersistenceManager, dataUpdate: Meeting, isUpdated: Bool) {
         self.persistence = persistence
+        self.dataUpdate = dataUpdate
+        self.isUpdate = isUpdated
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -98,9 +113,26 @@ class MeetingVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         initializeHideKeyboard()
         configLayout()
         setDelegate()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        if isUpdate {
+            meetingBtn.setTitle("Edit", for: .normal)
+            setupValue(data: dataUpdate)
+        }
+    }
+    
+    private func setupValue(data: Meeting) {
+        meetingTitle.text = data.title
+        meetingDescription.text = data.deskripsi
+        meetingDate.text = data.date
+        meetingTime.text = data.time
     }
     
     private func setDelegate() {
@@ -137,7 +169,14 @@ class MeetingVC: UIViewController {
         formatter.timeStyle = .short
         meetingTime.text = formatter.string(from: sender.date)
     }
-
+    
+    @objc
+    private func btnDelete(_ sender: UIButton) {
+        persistence.delete(dataUpdate)
+        persistence.save {
+            Helper.showAlert(message: "Delete Data SuccessFully", vc: self, style: .cancel)
+        }
+    }
     
     @objc
     private func btnPressed(_ sender: UIButton) {
@@ -147,27 +186,48 @@ class MeetingVC: UIViewController {
     @objc
     private func save() {
         
-        let meeting = Meeting(context: persistence.context)
-        
-        guard
-            let title = meetingTitle.text, !title.isEmpty,
-            let desc = meetingDescription.text, !desc.isEmpty,
-            let date = meetingDate.text, !date.isEmpty,
-            let time = meetingTime.text, !date.isEmpty
-            else {
-                print("there's textfield contain null")
-                return
+        if isUpdate {
+            guard
+                let title = meetingTitle.text, !title.isEmpty,
+                let desc = meetingDescription.text, !desc.isEmpty,
+                let date = meetingDate.text, !date.isEmpty,
+                let time = meetingTime.text, !time.isEmpty
+                else {
+                    print("there's textfield contain null")
+                    return
+            }
+            
+            dataUpdate.title = title
+            dataUpdate.deskripsi = desc
+            dataUpdate.date = date
+            dataUpdate.time = time
+            
+            persistence.save {
+                Helper.showAlert(message: "Edit Data Successfully", vc: self, style: .default)
+            }
         }
-        
-        meeting.title = title
-        meeting.deskripsi = desc
-        meeting.date = date
-        meeting.time = time
-        
-        persistence.save(success: {
-            Helper.showAlert(message: "Saved Successfully", vc: self)
-        })
-        
+        else {
+            let meeting = Meeting(context: persistence.context)
+            
+            guard
+                let title = meetingTitle.text, !title.isEmpty,
+                let desc = meetingDescription.text, !desc.isEmpty,
+                let date = meetingDate.text, !date.isEmpty,
+                let time = meetingTime.text, !time.isEmpty
+                else {
+                    print("there's textfield contain null")
+                    return
+            }
+            
+            meeting.title = title
+            meeting.deskripsi = desc
+            meeting.date = date
+            meeting.time = time
+            
+            persistence.save(success: {
+                Helper.showAlert(message: "Saved Successfully", vc: self, style: .default)
+            })
+        }
     }
     
     func initializeHideKeyboard(){
@@ -239,6 +299,15 @@ class MeetingVC: UIViewController {
             make.right.equalToSuperview().offset(-50)
             make.height.equalTo(50)
         }
+        
+        view.addSubview(deleteBtn)
+        deleteBtn.snp.makeConstraints { (make) in
+            make.top.equalTo(meetingBtn.snp.bottom).offset(30)
+            make.left.equalToSuperview().offset(50)
+            make.right.equalToSuperview().offset(-50)
+            make.height.equalTo(50)
+        }
     }
 
 }
+
