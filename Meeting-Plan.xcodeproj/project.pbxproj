@@ -3,10 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F1D9AB524C4912100E8C454 /* MeetingListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F1D9AB324C4912100E8C454 /* MeetingListCell.swift */; };
+		0F1D9AB624C4912100E8C454 /* MeetingListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F1D9AB424C4912100E8C454 /* MeetingListCell.xib */; };
 		0FB1723C24C41A190042EFFA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB1723B24C41A190042EFFA /* AppDelegate.swift */; };
 		0FB1723E24C41A190042EFFA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB1723D24C41A190042EFFA /* SceneDelegate.swift */; };
 		0FB1724024C41A190042EFFA /* MeetingListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB1723F24C41A190042EFFA /* MeetingListVC.swift */; };
@@ -17,6 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0F1D9AB324C4912100E8C454 /* MeetingListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingListCell.swift; sourceTree = "<group>"; };
+		0F1D9AB424C4912100E8C454 /* MeetingListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MeetingListCell.xib; sourceTree = "<group>"; };
 		0FB1723824C41A190042EFFA /* Meeting-Plan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Meeting-Plan.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FB1723B24C41A190042EFFA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0FB1723D24C41A190042EFFA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -67,6 +71,15 @@
 			path = "App Delegate";
 			sourceTree = "<group>";
 		};
+		0F1D9AB224C490D900E8C454 /* View Cell */ = {
+			isa = PBXGroup;
+			children = (
+				0F1D9AB324C4912100E8C454 /* MeetingListCell.swift */,
+				0F1D9AB424C4912100E8C454 /* MeetingListCell.xib */,
+			);
+			path = "View Cell";
+			sourceTree = "<group>";
+		};
 		0FB1722F24C41A190042EFFA = {
 			isa = PBXGroup;
 			children = (
@@ -88,6 +101,7 @@
 		0FB1723A24C41A190042EFFA /* Meeting-Plan */ = {
 			isa = PBXGroup;
 			children = (
+				0F1D9AB224C490D900E8C454 /* View Cell */,
 				0F1D9AB124C4819000E8C454 /* App Delegate */,
 				0F1D9AB024C4817100E8C454 /* View Controller */,
 				0FB1724724C41A1D0042EFFA /* Assets.xcassets */,
@@ -104,7 +118,6 @@
 				564FC4875E6F2D2F9F95E696 /* Pods-Meeting-Plan.debug.xcconfig */,
 				340EA0D518B8CB2B4BE3F711 /* Pods-Meeting-Plan.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -170,6 +183,7 @@
 			files = (
 				0FB1724B24C41A1D0042EFFA /* LaunchScreen.storyboard in Resources */,
 				0FB1724824C41A1D0042EFFA /* Assets.xcassets in Resources */,
+				0F1D9AB624C4912100E8C454 /* MeetingListCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -225,6 +239,7 @@
 				0FB1724624C41A190042EFFA /* Meeting_Plan.xcdatamodeld in Sources */,
 				0FB1724024C41A190042EFFA /* MeetingListVC.swift in Sources */,
 				0FB1723C24C41A190042EFFA /* AppDelegate.swift in Sources */,
+				0F1D9AB524C4912100E8C454 /* MeetingListCell.swift in Sources */,
 				0FB1723E24C41A190042EFFA /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
