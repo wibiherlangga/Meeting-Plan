@@ -13,6 +13,9 @@
 		0F1D9ABE24C4B67C00E8C454 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F1D9ABD24C4B67C00E8C454 /* PersistenceManager.swift */; };
 		0FA9265D24C5998E0052F2D3 /* MeetingListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA9265C24C5998E0052F2D3 /* MeetingListViewModel.swift */; };
 		0FA9265F24C5AA310052F2D3 /* MeetingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA9265E24C5AA310052F2D3 /* MeetingViewModel.swift */; };
+		0FA9266324C5BF9E0052F2D3 /* CoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA9266124C5BF9E0052F2D3 /* CoreService.swift */; };
+		0FA9266424C5BF9E0052F2D3 /* CreateMeetingServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA9266224C5BF9E0052F2D3 /* CreateMeetingServices.swift */; };
+		0FA9266624C5C12D0052F2D3 /* NetworkDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA9266524C5C12D0052F2D3 /* NetworkDelegate.swift */; };
 		0FB1723C24C41A190042EFFA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB1723B24C41A190042EFFA /* AppDelegate.swift */; };
 		0FB1723E24C41A190042EFFA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB1723D24C41A190042EFFA /* SceneDelegate.swift */; };
 		0FB1724024C41A190042EFFA /* MeetingListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB1723F24C41A190042EFFA /* MeetingListVC.swift */; };
@@ -31,6 +34,9 @@
 		0F1D9ABD24C4B67C00E8C454 /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 		0FA9265C24C5998E0052F2D3 /* MeetingListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingListViewModel.swift; sourceTree = "<group>"; };
 		0FA9265E24C5AA310052F2D3 /* MeetingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingViewModel.swift; sourceTree = "<group>"; };
+		0FA9266124C5BF9E0052F2D3 /* CoreService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreService.swift; sourceTree = "<group>"; };
+		0FA9266224C5BF9E0052F2D3 /* CreateMeetingServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateMeetingServices.swift; sourceTree = "<group>"; };
+		0FA9266524C5C12D0052F2D3 /* NetworkDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkDelegate.swift; sourceTree = "<group>"; };
 		0FB1723824C41A190042EFFA /* Meeting-Plan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Meeting-Plan.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FB1723B24C41A190042EFFA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0FB1723D24C41A190042EFFA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -93,6 +99,16 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		0FA9266024C5BF5A0052F2D3 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				0FA9266524C5C12D0052F2D3 /* NetworkDelegate.swift */,
+				0FA9266124C5BF9E0052F2D3 /* CoreService.swift */,
+				0FA9266224C5BF9E0052F2D3 /* CreateMeetingServices.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		0FB1722F24C41A190042EFFA = {
 			isa = PBXGroup;
 			children = (
@@ -115,6 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				0F1D9AB124C4819000E8C454 /* App Delegate */,
+				0FA9266024C5BF5A0052F2D3 /* Services */,
 				0FFC43FA24C53F82006C443C /* Model */,
 				0FFC43FB24C54022006C443C /* View Model */,
 				0F1D9AB224C490D900E8C454 /* Cell */,
@@ -270,9 +287,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0FA9266424C5BF9E0052F2D3 /* CreateMeetingServices.swift in Sources */,
 				0F1D9AB824C4A07400E8C454 /* MeetingVC.swift in Sources */,
 				0FB1724624C41A190042EFFA /* Meeting_Plan.xcdatamodeld in Sources */,
+				0FA9266324C5BF9E0052F2D3 /* CoreService.swift in Sources */,
 				0FF503E824C545BA0036A291 /* Meeting+CoreDataProperties.swift in Sources */,
+				0FA9266624C5C12D0052F2D3 /* NetworkDelegate.swift in Sources */,
 				0FB1724024C41A190042EFFA /* MeetingListVC.swift in Sources */,
 				0FF503E724C545BA0036A291 /* Meeting+CoreDataClass.swift in Sources */,
 				0FB1723C24C41A190042EFFA /* AppDelegate.swift in Sources */,

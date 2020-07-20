@@ -120,7 +120,7 @@ class MeetingVC: UIViewController {
             meetingBtn.setTitle("Edit", for: .normal)
             deleteBtn.isHidden = false
             titlePage.text = "Edit Meeting"
-            setupValue(data: viewModel.dataUpdate)
+            setupValue(data: viewModel.dataUpdate!)
         }
         
         meetingTitle.becomeFirstResponder()

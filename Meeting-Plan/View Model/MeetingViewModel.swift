@@ -12,13 +12,12 @@ class MeetingViewModel {
     
     let persistence: PersistenceManager
     var isUpdate: Bool
-    var dataUpdate: Meeting
+    var dataUpdate: Meeting?
     
-    init(persistence: PersistenceManager, isUpdate: Bool, dataUpdate: Meeting) {
+    init(persistence: PersistenceManager, isUpdate: Bool, dataUpdate: Meeting?) {
         self.persistence = persistence
         self.isUpdate = isUpdate
         self.dataUpdate = dataUpdate
-        
     }
     
     func save(title: String,
@@ -28,10 +27,10 @@ class MeetingViewModel {
               success: @escaping () -> Void) {
         
         if isUpdate {
-            dataUpdate.title = title
-            dataUpdate.deskripsi = desc
-            dataUpdate.date = date
-            dataUpdate.time = time
+            dataUpdate?.title = title
+            dataUpdate?.deskripsi = desc
+            dataUpdate?.date = date
+            dataUpdate?.time = time
             
             persistence.save {
                 success()
@@ -48,11 +47,10 @@ class MeetingViewModel {
                 success()
             }
         }
-        
     }
     
     func delete(success: @escaping () -> Void) {
-        persistence.delete(dataUpdate)
+        persistence.delete(dataUpdate!)
         persistence.save {
             success()
         }

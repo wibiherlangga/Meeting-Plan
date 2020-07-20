@@ -8,5 +8,6 @@ target 'Meeting-Plan' do
   # Pods for Meeting-Plan
 
 pod 'SnapKit', '~> 5.0.0'
+pod 'Alamofire', '~> 4.7.2'
 
 end

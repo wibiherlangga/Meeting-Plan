@@ -85,7 +85,8 @@ class MeetingListVC: UIViewController {
     @objc
     private func addMeeting(_ sender: UIBarButtonItem) {
         print("add meeting button pressed")
-        let viewModel = MeetingViewModel(persistence: PersistenceManager.shared, isUpdate: false, dataUpdate: Meeting())
+        var meeting: Meeting?
+        let viewModel = MeetingViewModel(persistence: PersistenceManager.shared, isUpdate: false, dataUpdate: meeting)
         navigationController?.pushViewController(MeetingVC(viewModel: viewModel), animated: true)
     }
 
