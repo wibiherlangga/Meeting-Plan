@@ -88,7 +88,7 @@ class MeetingVC: UIViewController {
     
     let deleteBtn: UIButton = {
        let deleteBtn = UIButton()
-        deleteBtn.setTitle("Cancel", for: .normal)
+        deleteBtn.setTitle("Delete", for: .normal)
         deleteBtn.backgroundColor = .systemRed
         deleteBtn.layer.cornerRadius = 5
         deleteBtn.addTarget(self, action: #selector(btnDelete(_:)), for: .touchUpInside)
@@ -113,7 +113,6 @@ class MeetingVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         initializeHideKeyboard()
         configLayout()
         setDelegate()
@@ -124,8 +123,12 @@ class MeetingVC: UIViewController {
         
         if isUpdate {
             meetingBtn.setTitle("Edit", for: .normal)
+            deleteBtn.isHidden = false
+            titlePage.text = "Edit Meeting"
             setupValue(data: dataUpdate)
         }
+        
+        meetingTitle.becomeFirstResponder()
     }
     
     private func setupValue(data: Meeting) {
@@ -174,7 +177,7 @@ class MeetingVC: UIViewController {
     private func btnDelete(_ sender: UIButton) {
         persistence.delete(dataUpdate)
         persistence.save {
-            Helper.showAlert(message: "Delete Data SuccessFully", vc: self, style: .cancel)
+            self.showAlert(message: "Delete Data SuccessFully", vc: self, style: .cancel)
         }
     }
     
@@ -186,16 +189,17 @@ class MeetingVC: UIViewController {
     @objc
     private func save() {
         
+        guard
+            let title = meetingTitle.text, !title.isEmpty,
+            let desc = meetingDescription.text, !desc.isEmpty,
+            let date = meetingDate.text, !date.isEmpty,
+            let time = meetingTime.text, !time.isEmpty
+            else {
+                showAlert(message: "there's textfield contain null", vc: self, style: .default)
+                return
+        }
+        
         if isUpdate {
-            guard
-                let title = meetingTitle.text, !title.isEmpty,
-                let desc = meetingDescription.text, !desc.isEmpty,
-                let date = meetingDate.text, !date.isEmpty,
-                let time = meetingTime.text, !time.isEmpty
-                else {
-                    print("there's textfield contain null")
-                    return
-            }
             
             dataUpdate.title = title
             dataUpdate.deskripsi = desc
@@ -203,21 +207,11 @@ class MeetingVC: UIViewController {
             dataUpdate.time = time
             
             persistence.save {
-                Helper.showAlert(message: "Edit Data Successfully", vc: self, style: .default)
+                self.showAlert(message: "Edit Data Successfully", vc: self, style: .default)
             }
         }
         else {
             let meeting = Meeting(context: persistence.context)
-            
-            guard
-                let title = meetingTitle.text, !title.isEmpty,
-                let desc = meetingDescription.text, !desc.isEmpty,
-                let date = meetingDate.text, !date.isEmpty,
-                let time = meetingTime.text, !time.isEmpty
-                else {
-                    print("there's textfield contain null")
-                    return
-            }
             
             meeting.title = title
             meeting.deskripsi = desc
@@ -225,12 +219,12 @@ class MeetingVC: UIViewController {
             meeting.time = time
             
             persistence.save(success: {
-                Helper.showAlert(message: "Saved Successfully", vc: self, style: .default)
+                self.showAlert(message: "Saved Successfully", vc: self, style: .default)
             })
         }
     }
     
-    func initializeHideKeyboard(){
+    func initializeHideKeyboard() {
     //Declare a Tap Gesture Recognizer which will trigger our dismissMyKeyboard() function
     let tap: UITapGestureRecognizer = UITapGestureRecognizer(
     target: self,
@@ -243,6 +237,18 @@ class MeetingVC: UIViewController {
     //In short- Dismiss the active keyboard.
     view.endEditing(true)
     }
+    
+    func showAlert(message: String, vc: UIViewController, style: UIAlertAction.Style) {
+        let alert = UIAlertController(title: "", message: message, preferredStyle: .alert)
+        let oke = UIAlertAction(title: "OKE", style: style, handler: { action in
+            self.navigationController?.popViewController(animated: true)
+        })
+        
+        alert.addAction(oke)
+        
+        vc.present(alert, animated: true, completion: nil)
+    }
+
     
     private func configLayout() {
         
@@ -307,6 +313,8 @@ class MeetingVC: UIViewController {
             make.right.equalToSuperview().offset(-50)
             make.height.equalTo(50)
         }
+        
+        deleteBtn.isHidden = true
     }
 
 }

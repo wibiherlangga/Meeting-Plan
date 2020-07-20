@@ -56,10 +56,10 @@ class MeetingListVC: UIViewController {
         print("meeting count: \(meeting.count)")
         guard meeting.count > 0 else {
             self.isDataTable = .empty
+            tableView.reloadData()
             return
         }
         isDataTable = .fill
-        print("meeting data: \(meeting[0].title)")
         tableView.reloadData()
     }
     
