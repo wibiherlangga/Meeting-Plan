@@ -24,14 +24,12 @@ class MeetingListVC: UIViewController {
     
     private let cellId = "MeetingListCell"
     
-    var meeting = [Meeting]()
-    
-    let persistence: PersistenceManager
-    
     var isDataTable: isDataTable = .empty
     
-    init(persistence: PersistenceManager) {
-        self.persistence = persistence
+    private let viewModel: MeetingListViewModel
+    
+    init(viewModel: MeetingListViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -51,9 +49,8 @@ class MeetingListVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        meeting = persistence.fetch(Meeting.self)
-        
-        print("meeting count: \(meeting.count)")
+        viewModel.fetchMeeting()
+        let meeting = viewModel.getMeeting
         guard meeting.count > 0 else {
             self.isDataTable = .empty
             tableView.reloadData()
@@ -88,7 +85,8 @@ class MeetingListVC: UIViewController {
     @objc
     private func addMeeting(_ sender: UIBarButtonItem) {
         print("add meeting button pressed")
-        navigationController?.pushViewController(MeetingVC(persistence: PersistenceManager.shared, dataUpdate: Meeting(), isUpdated: false), animated: true)
+        let viewModel = MeetingViewModel(persistence: PersistenceManager.shared, isUpdate: false, dataUpdate: Meeting())
+        navigationController?.pushViewController(MeetingVC(viewModel: viewModel), animated: true)
     }
 
 }
@@ -104,7 +102,7 @@ extension MeetingListVC: UITableViewDataSource {
         case .empty:
             return 0
         case .fill:
-            return meeting.count
+            return viewModel.getMeeting.count
         }
     }
 
@@ -116,15 +114,16 @@ extension MeetingListVC: UITableViewDataSource {
             return cell
         case .fill:
             let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MeetingListCell
-            cell.meetingTitle.text = meeting[indexPath.row].title
-            cell.meetingDate.text = meeting[indexPath.row].date
-            cell.meetingTime.text = meeting[indexPath.row].time
+            cell.meetingTitle.text = viewModel.meeting[indexPath.row].title
+            cell.meetingDate.text = viewModel.meeting[indexPath.row].date
+            cell.meetingTime.text = viewModel.meeting[indexPath.row].time
             return cell
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = MeetingVC(persistence: PersistenceManager.shared, dataUpdate: meeting[indexPath.row], isUpdated: true)
+        let getViewModel = MeetingViewModel(persistence: PersistenceManager.shared, isUpdate: true, dataUpdate: viewModel.getMeeting[indexPath.row])
+        let vc = MeetingVC(viewModel: getViewModel)
         navigationController?.pushViewController(vc, animated: true)
     }
 

@@ -70,7 +70,7 @@ class MeetingVC: UIViewController {
         toolBar.barStyle = .default
         toolBar.isTranslucent = true
         let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(onClickDoneButton))
+        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(dismissKeyboard))
         toolBar.setItems([space, doneButton], animated: false)
         toolBar.isUserInteractionEnabled = true
         toolBar.sizeToFit()
@@ -94,16 +94,11 @@ class MeetingVC: UIViewController {
         deleteBtn.addTarget(self, action: #selector(btnDelete(_:)), for: .touchUpInside)
         return deleteBtn
     }()
-        
-    let persistence: PersistenceManager
     
-    var dataUpdate = Meeting()
-    var isUpdate: Bool = false
+    let viewModel: MeetingViewModel
     
-    init(persistence: PersistenceManager, dataUpdate: Meeting, isUpdated: Bool) {
-        self.persistence = persistence
-        self.dataUpdate = dataUpdate
-        self.isUpdate = isUpdated
+    init(viewModel: MeetingViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -121,11 +116,11 @@ class MeetingVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        if isUpdate {
+        if viewModel.isUpdate {
             meetingBtn.setTitle("Edit", for: .normal)
             deleteBtn.isHidden = false
             titlePage.text = "Edit Meeting"
-            setupValue(data: dataUpdate)
+            setupValue(data: viewModel.dataUpdate)
         }
         
         meetingTitle.becomeFirstResponder()
@@ -148,15 +143,6 @@ class MeetingVC: UIViewController {
         
     }
     
-    @objc func dismissKeyboard() {
-        self.view.endEditing(true)
-    }
-    
-    @objc
-    private func onClickDoneButton() {
-        self.view.endEditing(true)
-    }
-    
     @objc
     private func setStartDateChanged(_ sender: UIDatePicker) {
         let formatter = DateFormatter()
@@ -175,18 +161,16 @@ class MeetingVC: UIViewController {
     
     @objc
     private func btnDelete(_ sender: UIButton) {
-        persistence.delete(dataUpdate)
-        persistence.save {
-            self.showAlert(message: "Delete Data SuccessFully", vc: self, style: .cancel)
+        viewModel.delete {
+            self.showAlert(message: "Delete Data SuccessFully", style: .cancel)
+            }
         }
-    }
-    
-    @objc
-    private func btnPressed(_ sender: UIButton) {
+
+    @objc private func btnPressed(_ sender: UIButton) {
         save()
     }
     
-    @objc
+
     private func save() {
         
         guard
@@ -195,50 +179,34 @@ class MeetingVC: UIViewController {
             let date = meetingDate.text, !date.isEmpty,
             let time = meetingTime.text, !time.isEmpty
             else {
-                showAlert(message: "there's textfield contain null", vc: self, style: .default)
+                showAlert(message: "there's textfield contain null", style: .default)
                 return
         }
         
-        if isUpdate {
-            
-            dataUpdate.title = title
-            dataUpdate.deskripsi = desc
-            dataUpdate.date = date
-            dataUpdate.time = time
-            
-            persistence.save {
-                self.showAlert(message: "Edit Data Successfully", vc: self, style: .default)
+        viewModel.save(title: title, desc: desc, date: date, time: time) {
+            if self.viewModel.isUpdate {
+                self.showAlert(message: "Edit Data Successfully", style: .default)
             }
-        }
-        else {
-            let meeting = Meeting(context: persistence.context)
-            
-            meeting.title = title
-            meeting.deskripsi = desc
-            meeting.date = date
-            meeting.time = time
-            
-            persistence.save(success: {
-                self.showAlert(message: "Saved Successfully", vc: self, style: .default)
-            })
+            else {
+                self.showAlert(message: "Saved Successfully", style: .default)
+            }
         }
     }
     
     func initializeHideKeyboard() {
-    //Declare a Tap Gesture Recognizer which will trigger our dismissMyKeyboard() function
-    let tap: UITapGestureRecognizer = UITapGestureRecognizer(
-    target: self,
-    action: #selector(dismissMyKeyboard))
-    //Add this tap gesture recognizer to the parent view
-    view.addGestureRecognizer(tap)
+        //Declare a Tap Gesture Recognizer which will trigger our dismissMyKeyboard() function
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(
+            target: self,
+            action: #selector(dismissKeyboard))
+        //Add this tap gesture recognizer to the parent view
+        view.addGestureRecognizer(tap)
     }
     
-    @objc func dismissMyKeyboard(){
-    //In short- Dismiss the active keyboard.
-    view.endEditing(true)
+    @objc func dismissKeyboard() {
+        self.view.endEditing(true)
     }
     
-    func showAlert(message: String, vc: UIViewController, style: UIAlertAction.Style) {
+    func showAlert(message: String, style: UIAlertAction.Style) {
         let alert = UIAlertController(title: "", message: message, preferredStyle: .alert)
         let oke = UIAlertAction(title: "OKE", style: style, handler: { action in
             self.navigationController?.popViewController(animated: true)
@@ -246,7 +214,7 @@ class MeetingVC: UIViewController {
         
         alert.addAction(oke)
         
-        vc.present(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
 
     
